@@ -1,0 +1,16 @@
+[
+  { "question": "How many days of annual leave do I get each year?", "expectedTitle": "Northwind Employee Handbook", "expectedPage": 2 },
+  { "question": "Can I carry forward unused leave to next year?", "expectedTitle": "Northwind Employee Handbook", "expectedPage": 2 },
+  { "question": "How long is paternity leave?", "expectedTitle": "Northwind Employee Handbook", "expectedPage": 2 },
+  { "question": "What are the core working hours?", "expectedTitle": "Northwind Employee Handbook", "expectedPage": 1 },
+  { "question": "How much is the monthly internet reimbursement?", "expectedTitle": "Northwind Employee Handbook", "expectedPage": 3 },
+  { "question": "Can I work from another country for a few weeks?", "expectedTitle": "Northwind Employee Handbook", "expectedPage": 3 },
+  { "question": "Where do I report harassment?", "expectedTitle": "Northwind Employee Handbook", "expectedPage": 4 },
+  { "question": "What is the salary range for a senior engineer?", "expectedTitle": "Northwind Compensation Guidelines", "expectedPage": 1 },
+  { "question": "What increment does a rating of 4 get?", "expectedTitle": "Northwind Compensation Guidelines", "expectedPage": 2 },
+  { "question": "When is the annual bonus paid?", "expectedTitle": "Northwind Compensation Guidelines", "expectedPage": 3 },
+  { "question": "How many approvals does a pull request need?", "expectedTitle": "Northwind Engineering Handbook", "expectedPage": 1 },
+  { "question": "Which days can we deploy to production?", "expectedTitle": "Northwind Engineering Handbook", "expectedPage": 2 },
+  { "question": "How quickly must a Sev1 incident be acknowledged?", "expectedTitle": "Northwind Engineering Handbook", "expectedPage": 3 },
+  { "question": "When is a postmortem required?", "expectedTitle": "Northwind Engineering Handbook", "expectedPage": 3 }
+]
