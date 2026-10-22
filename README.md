@@ -9,7 +9,7 @@
 - **Department-based access control.** HR-only documents never reach an engineer's answers. The filter runs inside the SQL query, before the AI sees anything.
 - **"I don't know" instead of guessing.** If no document is relevant enough, DocMind says so without calling the LLM at all.
 - **Guardrails.** Prompt-injection screening, document text is fenced off as data, and every answer is checked for citations. Uncited answers are flagged in the UI and in an audit log.
-- **Retrieval evaluation.** `npm run eval` measures how often search finds the right page (hit rate and MRR).
+- **Evaluation suite.** `npm run eval` runs 36 test questions: retrieval hit rate and MRR, access-control leak checks for restricted roles, "I don't know" checks on questions the documents can't answer, and (with `--answers`) answer and citation accuracy.
 - **Production basics.** JWT in an httpOnly cookie, bcrypt password hashing, rate limiting, Helmet security headers, input validation with Zod, Docker, and GitHub Actions CI.
 
 ## Architecture
@@ -85,9 +85,31 @@ The `samples/` folder has three PDFs for a fictional company, Northwind Labs.
 
 ```bash
 cd server
-npm test        # unit tests: chunking, prompt building, injection detection, grounding checks
-npm run eval    # retrieval quality on eval/questions.json (upload the sample PDFs first)
+npm test        # unit tests: chunking, prompt building, injection detection, grounding checks, eval scoring
+npm run eval    # evaluation on eval/questions.json (upload the sample PDFs first, see Demo script)
 ```
+
+### Evaluation
+
+`eval/questions.json` holds 36 questions about the sample PDFs, in three types:
+
+| Type | Count | What passes |
+|---|---|---|
+| `answerable` | 25 (14 simple, 11 tricky) | The right page is retrieved; with `--answers`, the answer contains the expected facts and cites that page |
+| `unanswerable` | 5 | DocMind says it couldn't find the answer instead of making one up |
+| `access` | 6 | A user without access to a document never gets a single chunk of it |
+
+"Tricky" questions are phrased the way people actually ask ("I was ill for 3 days, do I need to submit anything?") or need a small step of reasoning, rather than repeating the document's wording.
+
+```bash
+npm run eval                                   # retrieval, access and refusal checks (no LLM calls)
+npm run eval -- --answers                      # also generate and grade answers (~30 LLM calls)
+npm run eval -- --label before                 # save results to eval/results/before.json
+npm run eval -- --k 8 --min-sim 0.5 --label after --compare before   # try settings, compare
+npm run eval -- --only access                  # run one question type
+```
+
+`--k` and `--min-sim` override `TOP_K` and `MIN_SIMILARITY` for the run only, so you can tune them without editing `.env`. On Gemini's free tier `--answers` waits 4 seconds between LLM calls (change with `--delay`).
 
 ## Project structure
 
@@ -114,4 +136,4 @@ samples/                    demo PDFs
 - Background job queue for large uploads
 - Chat history and follow-up questions with conversation memory
 - An MCP server so AI assistants can search DocMind as a tool
-- LLM-as-judge evaluation of answer faithfulness, not just retrieval
+- LLM-as-judge grading for open-ended answers, on top of the keyword checks
